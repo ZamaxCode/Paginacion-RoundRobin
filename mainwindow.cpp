@@ -82,6 +82,12 @@ void MainWindow::startProcess()
 
     while(!processList.empty() || !blockedList.empty())
     {
+        //Se muestra quien es el siguinte proceso en entrar
+        if(!pendientList.empty())
+            ui->nextProcessLB->setText("Siguiente en entrar: ID - "+QString::number(pendientList.first().getId())+", Mem - "+QString::number(pendientList.first().getMemory()));
+        else
+            ui->nextProcessLB->setText("Siguiente en entrar: ninguno");
+
         //Se limpia seccion de pendientes
         QLayoutItem* child;
         while((child = ui->pendientProcessGL->takeAt(0))!=0)
@@ -250,27 +256,32 @@ void MainWindow::startProcess()
                 if(newFlag)
                 {
                     setProcess(1);
+                    ++contOfProcess;
 
-                    //Validacion para que entre el nuevo proceso si es que hay espacio
-                    if(processList.size()<5)
+                    //Si la lista de pendientes es igual a 1, significa que el proceso quiza pueda entrar
+                    if(pendientList.size()==1)
                     {
-                        //Se manda de la lista de pendientes a listos
-                        processList.push_back(pendientList.first());
-                        pendientList.pop_front();
-                        //Se imprime en la seccion de listos
-                        PendientProcess* pproc = new PendientProcess();
-                        pproc->setData(processList.back().getId(), processList.back().getTimeMax(), processList.back().getTt());
-                        ui->pendientProcessGL->addWidget(pproc);
-                        processList[processList.size()-1].setLlegada(globalCont);
-                        processList[processList.size()-1].setFirst(true);
+                        pendientToReady();
+
+                        //Si la lista de pendientes vuelve a estar vacia, entonces se imprime el nuevo proceso
+                        if(pendientList.empty())
+                        {
+                            PendientProcess* pproc = new PendientProcess();
+                            pproc->setData(processList.back().getId(), processList.back().getTimeMax(), processList.back().getTt());
+                            ui->pendientProcessGL->addWidget(pproc);
+                            processList[processList.size()-1].setLlegada(globalCont);
+                            processList[processList.size()-1].setFirst(true);
+                        }
                     }
-                    //Generacion de nuevo proceso de manera normal
-                    else
-                    {
-                        ++contOfProcess;
-                        ui->contOfBatchesLB->setText("Procesos Pendientes: "+QString::number(contOfProcess));
-                    }
+                    //Se actualiza el contador de procesos pendientes y se apaga la bandera de nuevo proceso
+                    ui->contOfBatchesLB->setText("Procesos Pendientes: "+QString::number(contOfProcess));
                     newFlag=false;
+
+                    //Se actualiza la etiqueta de nextProcess
+                    if(!pendientList.empty())
+                        ui->nextProcessLB->setText("Siguiente en entrar: ID - "+QString::number(pendientList.first().getId())+", Mem - "+QString::number(pendientList.first().getMemory()));
+                    else
+                        ui->nextProcessLB->setText("Siguiente en entrar: ninguno");
                 }
             }
             //Se apaga el estado de trabajando en el proceso
@@ -436,27 +447,32 @@ void MainWindow::startProcess()
             if(newFlag)
             {
                 setProcess(1);
+                ++contOfProcess;
 
-                //Validacion para que entre el nuevo proceso si es que hay espacio
-                if(processList.size()<5)
+                //Si la lista de pendientes es igual a 1, significa que el proceso quiza pueda entrar
+                if(pendientList.size()==1)
                 {
-                    //Se manda de la lista de pendientes a listos
-                    processList.push_back(pendientList.first());
-                    pendientList.pop_front();
-                    //Se imprime en la seccion de listos
-                    PendientProcess* pproc = new PendientProcess();
-                    pproc->setData(processList.back().getId(), processList.back().getTimeMax(), processList.back().getTt());
-                    ui->pendientProcessGL->addWidget(pproc);
-                    processList[processList.size()-1].setLlegada(globalCont);
-                    processList[processList.size()-1].setFirst(true);
+                    pendientToReady();
+
+                    //Si la lista de pendientes vuelve a estar vacia, entonces se imprime el nuevo proceso
+                    if(pendientList.empty())
+                    {
+                        PendientProcess* pproc = new PendientProcess();
+                        pproc->setData(processList.back().getId(), processList.back().getTimeMax(), processList.back().getTt());
+                        ui->pendientProcessGL->addWidget(pproc);
+                        processList[processList.size()-1].setLlegada(globalCont);
+                        processList[processList.size()-1].setFirst(true);
+                    }
                 }
-                //Generacion de nuevo proceso de manera normal
-                else
-                {
-                    ++contOfProcess;
-                    ui->contOfBatchesLB->setText("Procesos Pendientes: "+QString::number(contOfProcess));
-                }
+                //Se actualiza el contador de procesos pendientes y se apaga la bandera de nuevo proceso
+                ui->contOfBatchesLB->setText("Procesos Pendientes: "+QString::number(contOfProcess));
                 newFlag=false;
+
+                //Se actualiza la etiqueta de nextProcess
+                if(!pendientList.empty())
+                    ui->nextProcessLB->setText("Siguiente en entrar: ID - "+QString::number(pendientList.first().getId())+", Mem - "+QString::number(pendientList.first().getMemory()));
+                else
+                    ui->nextProcessLB->setText("Siguiente en entrar: ninguno");
             }
         }
     }

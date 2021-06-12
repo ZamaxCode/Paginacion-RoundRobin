@@ -724,6 +724,13 @@ color: rgb(0, 0, 0);</string>
           </item>
          </widget>
         </item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="nextProcessLB">
+          <property name="text">
+           <string>Siguiente en entrar: </string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="showResultsPage">
