@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     blockedprocess.cpp \
     finishprocess.cpp \
+    frame.cpp \
     main.cpp \
     mainwindow.cpp \
     pendientprocess.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
 HEADERS += \
     blockedprocess.h \
     finishprocess.h \
+    frame.h \
     mainwindow.h \
     pendientprocess.h \
     proceso.h \

@@ -1,6 +1,7 @@
 #ifndef PROCESO_H
 #define PROCESO_H
 #include <QString>
+#include <QList>
 
 class Proceso
 {
@@ -66,6 +67,8 @@ public:
 
     int getMemory() const;
     void setMemory(int newMemory);
+
+    QList<int>PosMemory;
 
 private:
     char operation;

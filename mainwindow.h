@@ -11,8 +11,10 @@
 #include "finishprocess.h"
 #include <QKeyEvent>
 #include <time.h>
-#include <resultprocess.h>
+#include "resultprocess.h"
 #include "blockedprocess.h"
+#include "frame.h"
+#include <QVarLengthArray>
 
 using namespace std;
 
@@ -48,6 +50,7 @@ private:
     int quantum;
     int globalCont = 0;
     int contActualProcess = 1;
+    int contAvailableFrames = 42;
     bool interFlag=false;
     bool errorFlag=false;
     bool pauseFlag=false;
@@ -55,6 +58,8 @@ private:
     bool newFlag=false;
     bool bcpFlag=false;
     bool fisrtBCP=false;
+
+    QVarLengthArray<Frame, 42> framesArray;
 
     QList<Proceso> pendientList;
     QList<Proceso> processList;
@@ -68,5 +73,10 @@ private:
     int resolveProcess(const int &d1, const int &d2, const char op);
     void printResults();
     void setBCP();
+    void initializeFramesArray();
+    void printFrameTable();
+    void pendientToReady();
+    void insertFrame(Proceso &p);
+    void changeFrameState(const Proceso &p, const QString state);
 };
 #endif // MAINWINDOW_H
